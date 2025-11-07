@@ -7,8 +7,7 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
-// 🚨 수정된 부분:
-// 'sourceCompatibility'는 'java' 플러그인 설정 블록 안에 위치해야 합니다.
+// 🚨 수정 1: 'sourceCompatibility'는 'java' 블록 안에 있어야 합니다.
 java {
     sourceCompatibility = '17'
 }
@@ -17,9 +16,19 @@ repositories {
     mavenCentral()
 }
 
+// 🚨 수정 2: JUnit 5 실행을 위한 의존성으로 변경
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    // JUnit BOM(Bill of Materials)으로 버전 관리
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+
+    // 테스트 작성에 필요한 API
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // (가장 중요) 테스트 실행을 위한 Launcher (이전 빌드 실패 원인)
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    
+    // (권장) 테스트 실행 엔진
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 test {
@@ -40,15 +49,12 @@ jacocoTestReport {
 
 sonar {
     properties {
-        // 5-1. (🚨필수수정🚨) Phase 0에서 확인한 SonarCloud Project Key 입력
-        property "sonar.projectKey", "여기에_ProjectKey_입력" 
-        
-        // 5-2. (🚨필수수정🚨) Phase 0에서 확인한 SonarCloud Organization 입력
-        property "sonar.organization", "여기에_Organization_입력" 
-        
+        // 5. 사용자 값 적용 (수정 완료)
+        property "sonar.projectKey", "rybbit3" 
+        property "sonar.organization", "rybbit3" 
         property "sonar.host.url", "https://sonarcloud.io"
 
         // 6. SonarQube에게 JaCoCo 리포트 파일의 위치를 알려줌 (핵심!)
-        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${build.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
     }
 }

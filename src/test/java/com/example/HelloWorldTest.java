@@ -1,9 +1,3 @@
-build.gradle:
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
-}
-
-src/test/java/com/example/HelloWorldTest.java:
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
