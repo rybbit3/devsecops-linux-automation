@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'jacoco' // 1. JaCoCo 플러그인 적용
+    id 'org.sonarqube' version '5.0.0.4638' // 2. SonarQube 플러그인 적용
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+test {
+    useJUnitPlatform()
+    // 3. 'test' 태스크가 끝나면 JaCoCo 리포트를 생성하도록 설정
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test // jacocoTestReport는 test 태스크에 의존
+    reports {
+        // 4. SonarQube가 읽을 XML 리포트 생성
+        xml.required = true
+        // (선택) 사람이 볼 HTML 리포트도 생성
+        html.required = true
+    }
+}
+
+sonar {
+    properties {
+        // 5. 1단계에서 확인한 SonarCloud 정보 입력
+        property "sonar.projectKey", "rybbit3" // 예: my-github-id_sonar-jacoco-test
+        property "sonar.organization", "rybbit3" // 예: my-github-id
+        property "sonar.host.url", "https://sonarcloud.io"
+
+        // 6. SonarQube에게 JaCoCo 리포트 파일의 위치를 알려줌 (핵심!)
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
