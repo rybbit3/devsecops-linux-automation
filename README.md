@@ -43,7 +43,15 @@
     - Sonar 스캐너가 모든 분석 데이터(정적 분석 + 커버리지)를 SonarCloud 서버로 전송합니다.
         
     - 개발자는 SonarCloud 대시보드에서 분석 결과와 테스트 커버리지 현황을 한눈에 확인합니다.
-  
+
+## 실습결과
+1. JaCoCo가 측정한 커버리지 리포트가 SonarCloud에 성공적으로 연동된것을 확인.
+<img width="1004" height="551" alt="image" src="https://github.com/user-attachments/assets/6b883216-b4e7-4d7b-8faf-06e8691bcb87" />
+
+2. SonarQube에서 "하드코딩된 비밀번호" 자체를 보안 취약점으로 탐지한것을 확인.
+<img width="1011" height="493" alt="image" src="https://github.com/user-attachments/assets/15f72c5e-5812-4f2f-ad7d-461eeb5e85d5" />
+
+
 ## 배운점
 - 배운점: SonarQube를 통해 테스트 커버리지와 SAST(정적분석)을 취합하여 확인하므로써 안전한 코드품질관리가 가능할수있다는것을 배웠습니다.
 - 어려웠던점: gradle과 sonar간 버전 호환성 문제로 인해, gradle 빌드과정에서 에러 해결에 어려움을 겪었습니다. Sonar의 공식문서를 통해 해당 문제를 해결했고, AI에 의존하지않고, 공식문서의 중요성을 느낄수있었습니다.
