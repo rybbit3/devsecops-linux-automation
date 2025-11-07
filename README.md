@@ -50,7 +50,7 @@
 <img width="1011" height="493" alt="image" src="https://github.com/user-attachments/assets/15f72c5e-5812-4f2f-ad7d-461eeb5e85d5" />
 
 
-## 배운점
-- 배운점: 본 프로젝트를 통해 테스트 커버리지(JaCoCo)와 정적 분석(SonarCloud SAST) 데이터를 CI 파이프라인에서 통합 관리함으로써, 개발 초기 단계부터 체계적이고 자동화된 코드 품질 및 보안 관리의 중요성을 깊이 이해했습니다. 이는 안전하고 유지보수하기 쉬운 코드를 만드는 데 필수적인 역량임을 깨달았습니다.
-- 어려웠던점: 가장 큰 어려움은 Gradle버전과 SonarQube Gradle Plugin버전 간의 호환성 문제였습니다. Plugin [id: 'org.sonarqube'] was not found와 같은 다양한 빌드 오류에 직면했으나, 여러 차례의 시행착오와 SonarQube/Gradle 공식 문서를 통해 문제를 성공적으로 해결했습니다. 이 과정에서 AI 도구에 전적으로 의존하기보다, 공식 문서와 디버깅을 통한 근본적인 문제 해결 능력의 중요성을 체감하며 성장할 수 있었습니다.
-- 향후 개선 계획: 이번 SonarCloud 연동 경험을 기반으로, Self-Hosted SonarQube 서버 구축 및 CI/CD 파이프라인 통합을 다음 목표로 설정했습니다. 구체적으로는 AWS EC2/ECS 환경에 SonarQube 서버를 직접 배포하고, Jenkins 또는 GitHub Actions를 활용하여 완전한 온프레미스/클라우드 기반 DevSecOps 파이프라인을 구축함으로써, 시스템 운영 및 관리 역량을 더욱 확장해 나갈 계획입니다.
+## 마무리하며
+- **배운점**: 본 프로젝트를 통해 테스트 커버리지(JaCoCo)와 정적 분석(SonarCloud SAST) 데이터를 CI 파이프라인에서 통합 관리함으로써, 개발 초기 단계부터 체계적이고 자동화된 코드 품질 및 보안 관리의 중요성을 깊이 이해했습니다. 이는 안전하고 유지보수하기 쉬운 코드를 만드는 데 필수적인 역량임을 깨달았습니다.
+- **어려웠던점**: 가장 큰 어려움은 Gradle버전과 SonarQube Gradle Plugin버전 간의 호환성 문제였습니다. Plugin [id: 'org.sonarqube'] was not found와 같은 다양한 빌드 오류에 직면했으나, 여러 차례의 시행착오와 SonarQube/Gradle 공식 문서를 통해 문제를 성공적으로 해결했습니다. 이 과정에서 AI 도구에 전적으로 의존하기보다, 공식 문서와 디버깅을 통한 근본적인 문제 해결 능력의 중요성을 체감하며 성장할 수 있었습니다.
+- **향후 개선 계획**: 이번 SonarCloud 연동 경험을 기반으로, Self-Hosted SonarQube 서버 구축 및 CI/CD 파이프라인 통합을 다음 목표로 설정했습니다. 구체적으로는 AWS EC2/ECS 환경에 SonarQube 서버를 직접 배포하고, Jenkins 또는 GitHub Actions를 활용하여 완전한 온프레미스/클라우드 기반 DevSecOps 파이프라인을 구축함으로써, 시스템 운영 및 관리 역량을 더욱 확장해 나갈 계획입니다.
