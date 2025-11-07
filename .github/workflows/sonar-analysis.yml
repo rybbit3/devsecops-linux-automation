@@ -30,16 +30,18 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: ${{ runner.os }}-gradle
           
-      - name: 4. Gradle Wrapper 권한 부여
-        run: chmod +x ./gradlew
+      # --- 4번 스텝(Gradlew 권한 부여) 삭제 ---
+      # 'gradlew' 파일이 없으므로 이 스텝은 필요 없습니다.
 
-      - name: 5. Gradle 빌드 및 테스트 (JaCoCo 리포트 생성)
+      - name: 4. Gradle 빌드 및 테스트 (JaCoCo 리포트 생성)
         # 'build' 태스크는 'test'를 실행하고, 'test'는 'jacocoTestReport'를 실행
-        run: ./gradlew build
+        # 'gradlew'가 아닌 'gradle' 명령어를 사용합니다.
+        run: gradle build
 
-      - name: 6. SonarCloud로 스캔 결과 전송 (JaCoCo 리포트 포함)
+      - name: 5. SonarCloud로 스캔 결과 전송 (JaCoCo 리포트 포함)
         # 'sonar' 태스크는 build.gradle의 설정대로 JaCoCo 리포트를 읽어서 전송
-        run: ./gradlew sonar
+        # 'gradlew'가 아닌 'gradle' 명령어를 사용합니다.
+        run: gradle sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # (PR 코멘트용)
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # 2단계에서 설정한 시크릿
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Phase 0에서 설정한 시크릿
