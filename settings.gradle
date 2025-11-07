@@ -9,4 +9,4 @@ pluginManagement {
 }
 
 // 프로젝트 이름을 설정합니다 (가이드와 동일하게)
-rootProject.name = 'sonar-jacoco-lab'
+rootProject.name = 'sonar-jacoco-test'
