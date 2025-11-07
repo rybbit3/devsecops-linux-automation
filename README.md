@@ -3,6 +3,17 @@
 ## 프로젝트 개요
 안전하고 신뢰도 높은 소프트웨어 개발을 위해 **CI/CD 파이프라인 내 코드 품질 자동 검증 시스템을 구축**했습니다. 본 프로젝트는 개발자가 코드를 Push하거나 Pull Request(PR) 생성 시, GitHub Actions가 자동으로 **정적 분석(SAST)** 과 **테스트 커버리지(JaCoCo)** 를 실행하고, 그 결과를 SonarCloud 대시보드에 통합 리포트하여 지속적인 코드 품질 관리 및 보안 강화를 자동화한 경험입니다.
 
+## 기술스택
+- **CI/CD:** GitHub Actions
+    
+- **정적 분석 (SAST):** SonarCloud
+    
+- **테스트 커버리지:** JaCoCo (Java Code Coverage)
+    
+- **빌드 도구:** Gradle
+    
+- **언어:** Java (JUnit)
+
 ## 아키텍처 및 핵심 플로우
 <img width="811" height="473" alt="image" src="https://github.com/user-attachments/assets/271b1317-ad61-4a15-91e8-f7579a86f270" />
 
@@ -30,19 +41,6 @@
     - Sonar 스캐너가 모든 분석 데이터(정적 분석 + 커버리지)를 SonarCloud 서버로 전송합니다.
         
     - 개발자는 SonarCloud 대시보드에서 분석 결과와 테스트 커버리지 현황을 한눈에 확인합니다.
-
-
-## 기술스택
-- **CI/CD:** GitHub Actions
-    
-- **정적 분석 (SAST):** SonarCloud
-    
-- **테스트 커버리지:** JaCoCo (Java Code Coverage)
-    
-- **빌드 도구:** Gradle
-    
-- **언어:** Java (JUnit)
-
 
 ## 실습결과
 1. JaCoCo가 생성한 코드 커버리지 리포트를 SonarCloud 대시보드에 성공적으로 연동하여, 각 메서드/라인별 커버리지 현황을 시각적으로 확인.
