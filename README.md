@@ -1,18 +1,104 @@
 # [DevSecOps] SonarCloud(SAST) & JaCoCo 기반 CI/CD 파이프라인 구축
 
 ## 프로젝트 개요
-안전하고 신뢰도 높은 소프트웨어 개발을 위해 **CI/CD 파이프라인 내 코드 품질 자동 검증 시스템을 구축**했습니다. 본 프로젝트는 개발자가 코드를 Push하거나 Pull Request(PR) 생성 시, GitHub Actions가 자동으로 **정적 분석(SAST)** 과 **테스트 커버리지(JaCoCo)** 를 실행하고, 그 결과를 SonarCloud 대시보드에 통합 리포트하여 지속적인 코드 품질 관리 및 보안 강화를 자동화한 경험입니다.
+본 프로젝트는 **Linux 기반 운영 환경**에서의 안정적인 서비스 배포와 장애 대응을 목표로 구축되었습니다.
+
+**'안정적인 인프라 운영'**과 **'효율적인 CI/CD 환경 구성'**을 달성하기 위해, GitHub Actions와 **Bash Shell Script**를 활용하여 배포 과정을 100% 자동화했습니다. 또한, 애플리케이션뿐만 아니라 리눅스 서버 자체의 리소스(Disk, Memory, CPU)를 실시간으로 감시할 수 있는 모니터링 시스템을 구축하여 **잠재적 문제를 사전에 예측**할 수 있도록 설계했습니다.
+
+## Architecture
+복잡한 오케스트레이션 도구 없이, **Linux 서버(EC2)** 본연의 기능을 활용한 경량화된 아키텍처입니다.
+
+```mermaid
+graph TD
+    subgraph "CI Pipeline (GitHub Actions)"
+        A[Code Push] --> B(Build & Test)
+        B --> C{SonarCloud Analysis}
+        C -->|Pass| D[Create Artifact (Jar/Image)]
+    end
+    
+    subgraph "CD Pipeline (Bash Scripting)"
+        D -->|SSH Connection| E[Linux Server (EC2)]
+        E --> F[Execute deploy.sh]
+        F --> G[Health Check Loop]
+    end
+
+    subgraph "Monitoring System (Docker Compose)"
+        H[Node Exporter] -->|Linux Metrics| I[Prometheus]
+        J[App Actuator] -->|App Metrics| I
+        I --> K[Grafana Dashboard]
+        K -->|Alert| L[Slack Notification]
+    end
 
 ## 기술스택
-- **CI/CD:** GitHub Actions
-    
-- **정적 분석 (SAST):** SonarCloud
-    
-- **테스트 커버리지:** JaCoCo (Java Code Coverage)
-    
-- **빌드 도구:** Gradle
-    
-- **언어:** Java (JUnit)
+- Linux (Rocky/Ubuntu)
+- Bash Shell
+- Prometheus & Grafana
+- GitHub Actions
+- SonarCloud & JaCoCo
+
+## 핵심 플로우 (Workflow)
+1. CI (Continuous Integration): 코드 품질 검증
+[GitHub 개발자]: main 브랜치에 코드를 Push하거나 Pull Request를 생성합니다.
+
+[GitHub Actions]: .github/workflows/sonar-analysis.yml 워크플로우가 트리거됩니다.
+
+[Build & Test]:
+
+./gradlew build 수행 중 test 태스크가 동작합니다.
+
+JaCoCo 플러그인이 테스트 커버리지를 측정하여 jacocoTestReport.xml을 생성합니다.
+
+[Static Analysis]:
+
+Sonar 스캐너가 코드의 정적 분석(버그, 코드 스멜)을 수행하고, JaCoCo 리포트를 통합하여 SonarCloud로 전송합니다.
+
+2. CD (Continuous Deployment): 리눅스 서버 배포
+[Artifact Upload]: 품질 검증을 통과한 빌드 결과물(Jar)을 생성합니다.
+
+[SSH & Deploy]:
+
+GitHub Actions가 EC2 리눅스 서버에 SSH로 접속합니다.
+
+서버 내의 **deploy.sh (Bash Script)**를 실행합니다.
+
+스크립트는 기존 프로세스 종료(PID Kill) -> 새 버전 실행 -> Health Check 과정을 자동으로 수행합니다.
+
+3. Monitoring: 장애 감지
+[Metrics Collection]:
+
+Node Exporter가 리눅스 서버의 CPU, Disk, Memory 사용량을 수집합니다.
+
+Prometheus가 주기적으로 메트릭을 긁어갑니다(Scraping).
+
+[Visualization & Alert]:
+
+Grafana 대시보드를 통해 서버 상태를 시각화하고, 이상 징후 발생 시 Slack으로 알림을 보냅니다.
+
+## 실습 결과 (Results)
+1. 코드 품질 시각화 (SonarCloud & JaCoCo)
+JaCoCo가 생성한 코드 커버리지 리포트를 SonarCloud 대시보드에 성공적으로 연동하여, 각 메서드/라인별 커버리지 현황을 시각적으로 확인했습니다. <img width="100%" alt="coverage report" src="https://github.com/user-attachments/assets/6b883216-b4e7-4d7b-8faf-06e8691bcb87" />
+
+2. 보안 취약점 탐지 (SAST)
+정적 분석 기능을 통해 '하드코딩된 비밀번호'와 같은 잠재적 보안 취약점을 실제 코드에서 정확히 탐지하고 리포트했습니다. <img width="100%" alt="security report" src="https://github.com/user-attachments/assets/15f72c5e-5812-4f2f-ad7d-461eeb5e85d5" />
+
+3. 리눅스 서버 배포 및 모니터링
+(여기에 EC2 터미널 배포 로그 캡처나, Grafana 대시보드 이미지를 추가하면 완벽합니다)
+
+## 회고 (Retrospective)
+배운 점
+본 프로젝트를 통해 단순한 코드 품질 관리(CI)를 넘어, 실제 운영 환경(Linux)으로의 배포(CD)와 모니터링까지 연결되는 전체 파이프라인을 구축했습니다. 특히 Bash Script를 직접 작성하여 배포 프로세스를 제어하고, Prometheus로 서버의 리소스를 감시하면서 **'안정적인 운영'**이 무엇인지 깊이 이해하게 되었습니다.
+
+어려웠던 점 & 해결
+가장 큰 어려움은 Gradle 버전과 SonarQube 플러그인 간의 호환성 문제였습니다. Plugin [id: 'org.sonarqube'] was not found 오류에 직면했으나, AI 도구에만 의존하지 않고 **공식 문서(Release Note)**를 교차 검증하며 버전을 맞추는 과정을 통해 근본적인 문제 해결 능력을 길렀습니다.
+
+향후 개선 계획
+현재의 리눅스 단일 서버 구성을 넘어, **고가용성(HA)**을 확보하는 것이 목표입니다.
+
+Scale-out: 트래픽 증가에 대비해 EC2를 오토스케일링 그룹(ASG)으로 묶고 로드밸런서(ALB)를 배치할 계획입니다.
+
+GitOps: ArgoCD를 도입하여 인프라 형상 관리를 고도화할 예정입니다.
+
+
 
 ## 아키텍처 및 핵심 플로우
 <img width="811" height="473" alt="image" src="https://github.com/user-attachments/assets/271b1317-ad61-4a15-91e8-f7579a86f270" />
