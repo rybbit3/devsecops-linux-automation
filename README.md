@@ -28,6 +28,7 @@ graph TD
         I --> K[Grafana Dashboard]
         K -->|Alert| L[Slack Notification]
     end
+```
 
 ## 기술스택
 - Linux (Rocky/Ubuntu)
